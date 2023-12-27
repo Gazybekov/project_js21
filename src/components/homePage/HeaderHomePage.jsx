@@ -1,6 +1,5 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
-import img1 from "./assets/star1.svg";
 import img2 from "./assets/star2.svg";
 import calvin from "./assets/calvin.svg";
 import gucci from "./assets/gucci-logo-1 1.svg";
@@ -8,6 +7,7 @@ import prada from "./assets/prada-logo-1 1.svg";
 import versace from "./assets/veerc.svg";
 import zara from "./assets/zara-logo-1 1.svg";
 import "./HeaderHome.css";
+
 const HeaderHomePage = () => {
   return (
     <div className="wrapper">

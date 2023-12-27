@@ -15,6 +15,7 @@ import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import { Link } from "react-router-dom";
+import { Button } from "@mui/material";
 
 const pages = [
   { id: 1, title: "Products", link: "/products" },
@@ -178,7 +179,8 @@ export default function Navbar() {
           <Typography
             variant="h6"
             noWrap
-            component="div"
+            component="a"
+            href="/"
             sx={{
               display: {
                 xs: "none",
@@ -187,7 +189,7 @@ export default function Navbar() {
               fontFamily: "monospace",
               fontSize: 40,
               fontWeight: 700,
-              color: "white",
+              color: "inherit",
               letterSpacing: ".3rem",
               textDecoration: "none",
             }}
@@ -196,9 +198,9 @@ export default function Navbar() {
           </Typography>
           {pages.map((elem) => (
             <Link key={elem.id} to={elem.link}>
-              <MenuItem>
-                <Typography textAlign="center">{elem.title}</Typography>
-              </MenuItem>
+              <Button sx={{ my: 2, color: "white", display: "block" }}>
+                {elem.title}
+              </Button>
             </Link>
           ))}
           <Box sx={{ flexGrow: 1 }} />
