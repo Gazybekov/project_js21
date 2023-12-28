@@ -19,11 +19,9 @@ const MainRoutes = () => {
     { id: 5, link: "/cart", element: <CartPage /> },
     { id: 6, link: "/auth", element: <AuthPage /> },
     { id: 7, link: "/addProduct", element: <AddProduct /> },
-  ];
-  const PRIVATE_ROUTES = [
-    { id: 7, link: "/admin", element: <AdminPage /> },
     { id: 8, link: "/edit/:id", element: <EditPage /> },
   ];
+  const PRIVATE_ROUTES = [{ id: 7, link: "/admin", element: <AdminPage /> }];
   return (
     <div>
       <Routes>

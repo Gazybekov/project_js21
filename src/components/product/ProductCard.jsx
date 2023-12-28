@@ -1,7 +1,66 @@
+import {
+  Button,
+  Card,
+  CardActionArea,
+  CardContent,
+  CardMedia,
+  Rating,
+  Stack,
+  Typography,
+} from "@mui/material";
 import React from "react";
+import { useProducts } from "../context/ProductContextProvider";
+import { useNavigate } from "react-router-dom";
 
 const ProductCard = ({ elem }) => {
-  return <div></div>;
+  const navigate = useNavigate();
+  const { deleteProduct } = useProducts();
+  return (
+    <Card
+      sx={{
+        width: { md: "30vw", lg: "19vw" },
+        height: 450,
+        boxShadow: "none",
+        ".MuiOutlinedInput-notchedOutline": { border: 0 },
+        margin: "2%",
+      }}
+    >
+      <CardActionArea>
+        <CardMedia sx={{ height: 240, borderRadius: 4 }} image={elem.image} />
+      </CardActionArea>
+
+      <CardContent sx={{ padding: "20px 5px 0px 5px" }}>
+        <Typography fontSize="20" fontWeight={700} variant="h5" component="div">
+          {elem.title}
+        </Typography>
+        <Stack spacing={1} margin="8px 0">
+          <Rating name="haf-rating" defaultValue={0} precision={1} />
+        </Stack>
+        <Typography color="black" fontSize="24px" fontWeight={700}>
+          {elem.price}
+        </Typography>
+        <Typography color="black" fontSize="24px" fontWeight={700}>
+          {elem.description}
+        </Typography>
+        <Button
+          onClick={() => deleteProduct(elem.id)}
+          size="medium"
+          variant="outlined"
+          color="secondary"
+        >
+          Delete
+        </Button>
+        <Button
+          onClick={() => navigate(`/edit/${elem.id}`)}
+          size="medium"
+          variant="outlined"
+          color="primary"
+        >
+          Edit
+        </Button>
+      </CardContent>
+    </Card>
+  );
 };
 
 export default ProductCard;
