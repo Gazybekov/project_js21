@@ -3,7 +3,10 @@ import ProductsList from "../components/product/ProductsList";
 
 const ProductPage = () => {
   return (
-    <div>
+    <div style={{ display: "flex", justifyContent: "space-between" }}>
+      <div style={{ width: "300px", flex: "none" }}>
+        {/* <CategoryFilter /> */}
+      </div>
       <ProductsList />
     </div>
   );

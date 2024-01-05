@@ -16,6 +16,7 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import { Link } from "react-router-dom";
 import { Button } from "@mui/material";
+import { ShoppingCart } from "@mui/icons-material";
 
 const pages = [
   { id: 1, title: "Products", link: "/products" },
@@ -134,6 +135,7 @@ export default function Navbar() {
         </IconButton>
         <p>Messages</p>
       </MenuItem>
+
       <MenuItem>
         <IconButton
           size="large"
@@ -211,19 +213,17 @@ export default function Navbar() {
               aria-label="show 4 new mails"
               color="inherit"
             >
-              <Badge badgeContent={4} color="error">
-                <MailIcon />
-              </Badge>
+              <Link to={"/cart"}>
+                <Badge color="success">
+                  <ShoppingCart sx={{ color: "white" }} />
+                </Badge>
+              </Link>
             </IconButton>
             <IconButton
               size="large"
               aria-label="show 17 new notifications"
               color="inherit"
-            >
-              <Badge badgeContent={17} color="error">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
+            ></IconButton>
             <IconButton
               size="large"
               edge="end"
