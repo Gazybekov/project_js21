@@ -1,4 +1,5 @@
 import {
+  Button,
   Table,
   TableBody,
   TableCell,
@@ -7,10 +8,19 @@ import {
   TableRow,
 } from "@mui/material";
 import { useCart } from "../context/CartContextProvider";
+import React, { useEffect } from "react";
 
 const Cart = () => {
-  const { cart } = useCart();
+  const { cart, getCart, changeProductCount, deleteProductFromCart } =
+    useCart();
   console.log(cart);
+  useEffect(() => {
+    getCart();
+  }, []);
+  const cartCleaner = () => {
+    localStorage.removeItem("cart");
+    getCart();
+  };
   return (
     <TableContainer>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -31,13 +41,32 @@ const Cart = () => {
               <TableCell component="th" scope="row">
                 <img width={"70"} src={elem.item.image} alt="" />
               </TableCell>
-              <TableCell>{elem.item.title}</TableCell>
-              <TableCell>{elem.item.category}</TableCell>
-              <TableCell>{elem.item.price}</TableCell>
+              <TableCell align="right">{elem.item.title}</TableCell>
+              <TableCell align="right">{elem.item.category}</TableCell>
+              <TableCell align="right">{elem.item.price}</TableCell>
+
+              <TableCell align="right">
+                <input
+                  onChange={(e) => {
+                    changeProductCount(elem.item.id, e.target.value);
+                  }}
+                  type="number"
+                  min={1}
+                  max={20}
+                  value={elem.count}
+                />
+              </TableCell>
+              <TableCell align="right">{elem.subPrice}</TableCell>
+              <TableCell align="right">
+                <Button onClick={() => deleteProductFromCart(elem.item.id)}>
+                  DELETE
+                </Button>
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
+      <Button onClick={cartCleaner}>BYE NOW FOR {cart.totalPrice} </Button>
     </TableContainer>
   );
 };

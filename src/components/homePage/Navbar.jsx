@@ -17,6 +17,7 @@ import MoreIcon from "@mui/icons-material/MoreVert";
 import { Link } from "react-router-dom";
 import { Button } from "@mui/material";
 import { ShoppingCart } from "@mui/icons-material";
+import { useCart } from "../context/CartContextProvider";
 
 const pages = [
   { id: 1, title: "Products", link: "/products" },
@@ -65,6 +66,11 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function Navbar() {
+  const [badgeCount, setBadgeCount] = React.useState(0);
+  const { getProductsCountInCart, addProductToCart } = useCart();
+  React.useEffect(() => {
+    setBadgeCount(getProductsCountInCart());
+  }, [addProductToCart]);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
@@ -214,7 +220,7 @@ export default function Navbar() {
               color="inherit"
             >
               <Link to={"/cart"}>
-                <Badge color="success">
+                <Badge badgeContent={badgeCount} color="success">
                   <ShoppingCart sx={{ color: "white" }} />
                 </Badge>
               </Link>

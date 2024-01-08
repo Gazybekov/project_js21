@@ -1,15 +1,21 @@
 import React, { createContext, useContext, useReducer } from "react";
 import { ACTIONS } from "../../helpers/const";
-import { getLocalStorage } from "../../helpers/functions";
+import {
+  calcSubPrice,
+  calcTotalPrice,
+  getLocalStorage,
+  getProductsCountInCart,
+} from "../../helpers/functions";
 export const cartContext = createContext();
 export const useCart = () => useContext(cartContext);
 const INIT_STATE = {
-  cart: JSON.parse(localStorage.getItem("cart")),
+  cart1: JSON.parse(localStorage.getItem("cart")),
+  cartLength: getProductsCountInCart(),
 };
 const reducer = (state = INIT_STATE, action) => {
   switch (action.type) {
     case ACTIONS.GET_CART:
-      return { ...state, cart: action.payload };
+      return { ...state, cart1: action.payload };
     default:
       return state;
   }
@@ -44,6 +50,7 @@ const CartContextProvider = ({ children }) => {
     let newProduct = {
       item: product,
       count: 1,
+      subPrice: +product.price,
     };
     // проверяем есть ли уже продукт, который хотим добавить в корзину
     let productToFind = cart.products.filter(
@@ -58,13 +65,60 @@ const CartContextProvider = ({ children }) => {
       );
     }
     // обновляем данные в localStorage
+    cart.totalPrice = calcTotalPrice(cart.products);
     localStorage.setItem("cart", JSON.stringify(cart));
     // обновляем состояние
     dispatch({ type: ACTIONS.GET_CART, payload: cart });
   };
+  // функция для проверки на наличие товара в корзине
+  const checkProductInCart = (id) => {
+    let cart = getLocalStorage();
+    if (cart) {
+      let newCart = cart.products.filter((elem) => elem.item.id == id);
+      return newCart.length > 0 ? true : false;
+    }
+  };
+
+  // пересчитываем totalPrice, так как кол-во поменялось
+  // функция для изменения кол-ва товаров в корзине
+  const changeProductCount = (id, count) => {
+    // получаем данные корзины из localStorage
+    let cart = getLocalStorage();
+    // перебираем массив с продуктами из корзины, и у продукта, у которого id совпадает  с тем id, что передали при вызове, перезаписываем кол-во и subPrice
+    cart.products = cart.products.map((product) => {
+      if (product.item.id === id) {
+        product.count = count;
+        product.subPrice = calcSubPrice(product);
+      }
+      return product;
+    });
+    cart.totalPrice = calcTotalPrice(cart.products);
+    localStorage.setItem("cart", JSON.stringify(cart));
+    dispatch({ type: ACTIONS.GET_CART, payload: cart });
+  };
+  // !delete
+  const deleteProductFromCart = (id) => {
+    let cart = getLocalStorage();
+    // фильтруем массив products, и оставляем только те продукты, у которых id не совпадает с id переданным при вызове функции
+    cart.products = cart.products.filter((elem) => {
+      return elem.item.id !== id;
+    });
+    cart.totalPrice = calcTotalPrice(cart.products);
+    localStorage.setItem("cart", JSON.stringify(cart));
+    dispatch({
+      type: ACTIONS.GET_CART,
+      payload: cart,
+    });
+  };
+
   const values = {
     addProductToCart,
-    cart: state.cart,
+    cart: state.cart1,
+    getCart,
+    checkProductInCart,
+    changeProductCount,
+    deleteProductFromCart,
+    getProductsCountInCart,
   };
   return <cartContext.Provider value={values}>{children}</cartContext.Provider>;
 };
