@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useProducts } from "../context/ProductContextProvider";
 import { Box, Button, TextField, Typography } from "@mui/material";
+import CategorySelect from "./CategorySelect";
 
 const AddProduct = () => {
   const { addProduct } = useProducts();
@@ -11,6 +12,7 @@ const AddProduct = () => {
     image: "",
     price: "",
   });
+
   const handleInput = (e) => {
     if (e.target.name === "price") {
       const obj = { ...product, [e.target.name]: Number(e.target.value) };
@@ -41,6 +43,7 @@ const AddProduct = () => {
         label="Title"
         variant="outlined"
       />
+      <CategorySelect />
       <TextField
         onChange={handleInput}
         name="description"

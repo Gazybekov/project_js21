@@ -15,7 +15,32 @@
       "image": "https://rabona.com.ua/media/images/watermark_products/2023/01/6fba6a46dc6444c08fc31d5ed88c3b85.jpg",
       "price": 200000,
       "id": 2
+    },
+    {
+      "title": "Женская куртка",
+      "category": "",
+      "description": "234",
+      "image": "12345",
+      "price": 1234,
+      "id": 3
     }
   ],
-  "categories": []
+  "categories": [
+    {
+      "name": "T-shirt",
+      "id": 1
+    },
+    {
+      "name": "Hoodie",
+      "id": 2
+    },
+    {
+      "name": "Short",
+      "id": 3
+    },
+    {
+      "name": "Hats",
+      "id": 4
+    }
+  ]
 }

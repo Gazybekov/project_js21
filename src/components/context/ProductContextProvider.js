@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useReducer } from "react";
-import { ACTIONS, API } from "../../helpers/const";
+import { ACTIONS, API, API_CATEGORIES } from "../../helpers/const";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 export const productContext = createContext();
@@ -52,7 +52,26 @@ const ProductContextProvider = ({ children }) => {
     const { data } = await axios(`${API}/${id}`);
     dispatch({ type: ACTIONS.GET_ONE_PRODUCT, payload: data });
   };
-
+  //! GET_CATEGORIES
+  const getCategories = async () => {
+    const { data } = await axios(API_CATEGORIES);
+    dispatch({ type: ACTIONS.GET_CATEGORIES, payload: data });
+  };
+  //! CREATE_CATEGORIES
+  const createCategories = async (newCategory) => {
+    await axios.post(API_CATEGORIES, newCategory);
+  };
+  //! FILTER && SORT
+  const fetchByParams = (query, value) => {
+    const search = new URLSearchParams(window.location.search);
+    if (value === "all") {
+      search.delete(query);
+    } else {
+      search.set(query, value);
+    }
+    const url = `${window.location.pathname}${search.toString()}`;
+    navigate(url);
+  };
   const values = {
     addProduct,
     getProducts,
@@ -61,6 +80,10 @@ const ProductContextProvider = ({ children }) => {
     getOneProduct,
     editProduct,
     oneProduct: state.oneProduct,
+    getCategories,
+    createCategories,
+    categories: state.categories,
+    fetchByParams,
   };
   return (
     <productContext.Provider value={values}>{children}</productContext.Provider>
