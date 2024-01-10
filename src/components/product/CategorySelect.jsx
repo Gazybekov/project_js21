@@ -1,10 +1,9 @@
 import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
-import React, { useEffect } from "react";
 import { useProducts } from "../context/ProductContextProvider";
+import { useEffect } from "react";
 
 const CategorySelect = (props) => {
   const { handleInput } = props;
-
   const { categories, getCategories } = useProducts();
   useEffect(() => {
     getCategories();

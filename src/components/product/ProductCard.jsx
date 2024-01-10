@@ -9,16 +9,20 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import { useProducts } from "../context/ProductContextProvider";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContextProvider";
 import { AddShoppingCart } from "@mui/icons-material";
+import Detail from "./Detail";
 
 const ProductCard = ({ elem }) => {
   const navigate = useNavigate();
   const { deleteProduct } = useProducts();
   const { addProductToCart } = useCart();
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
   return (
     <Card
       sx={{
@@ -29,7 +33,7 @@ const ProductCard = ({ elem }) => {
         margin: "2%",
       }}
     >
-      <CardActionArea>
+      <CardActionArea onClick={handleOpen}>
         <CardMedia sx={{ height: 240, borderRadius: 4 }} image={elem.image} />
       </CardActionArea>
 
@@ -66,6 +70,7 @@ const ProductCard = ({ elem }) => {
           <AddShoppingCart />
         </IconButton>
       </CardContent>
+      <Detail open={open} handleClose={handleClose} elem={elem} />
     </Card>
   );
 };

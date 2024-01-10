@@ -43,7 +43,7 @@ const AddProduct = () => {
         label="Title"
         variant="outlined"
       />
-      <CategorySelect />
+      <CategorySelect handleInput={handleInput} />
       <TextField
         onChange={handleInput}
         name="description"

@@ -1,7 +1,6 @@
-import { Button } from "@mui/base";
-import { Box, Modal, TextField, Typography } from "@mui/material";
+import { Box, Button, Modal, TextField, Typography } from "@mui/material";
 import { useProducts } from "../context/ProductContextProvider";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 const style = {
   position: "absolute",
   top: "50%",
@@ -19,19 +18,15 @@ const AddCategoryModal = () => {
     createCategories(newCategory);
   };
   return (
-    <Modal
-      sx={style}
-      open
-      aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description"
-    >
+    <Modal sx={style} open>
       <Box>
-        <Typography variant="h6">Add new category</Typography>
+        <Typography component="h2" variant="h6">
+          Add new category
+        </Typography>
         <TextField
           onChange={(e) => setCategory(e.target.value)}
           fullWidth
           variant="outlined"
-          required
         />
         <Button onClick={handleAdd}>Add</Button>
         <Button>Close</Button>

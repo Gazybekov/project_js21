@@ -31,7 +31,7 @@ const ProductContextProvider = ({ children }) => {
   };
   //! READ
   const getProducts = async () => {
-    const { data } = await axios(API);
+    const { data } = await axios(`${API}${window.location.search}`);
     dispatch({
       type: ACTIONS.GET_PRODUCTS,
       payload: data,
@@ -54,8 +54,8 @@ const ProductContextProvider = ({ children }) => {
   };
   //! GET_CATEGORIES
   const getCategories = async () => {
-    const { data } = await axios(API_CATEGORIES);
-    dispatch({ type: ACTIONS.GET_CATEGORIES, payload: data });
+    const result = await axios(API_CATEGORIES);
+    dispatch({ type: ACTIONS.GET_CATEGORIES, payload: result.data });
   };
   //! CREATE_CATEGORIES
   const createCategories = async (newCategory) => {
@@ -69,7 +69,7 @@ const ProductContextProvider = ({ children }) => {
     } else {
       search.set(query, value);
     }
-    const url = `${window.location.pathname}${search.toString()}`;
+    const url = `${window.location.pathname}?${search.toString()}`;
     navigate(url);
   };
   const values = {

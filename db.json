@@ -2,7 +2,7 @@
   "products": [
     {
       "title": "Женская куртка",
-      "category": "",
+      "category": "T-shirt",
       "description": "PUMA",
       "image": "https://images.puma.com/image/upload/f_auto,q_auto,b_rgb:fafafa/global/848940/01/mod01/fnd/TUR/w/1000/h/1000/fmt/png.jpg",
       "price": 10000,
@@ -15,14 +15,6 @@
       "image": "https://rabona.com.ua/media/images/watermark_products/2023/01/6fba6a46dc6444c08fc31d5ed88c3b85.jpg",
       "price": 200000,
       "id": 2
-    },
-    {
-      "title": "Женская куртка",
-      "category": "",
-      "description": "234",
-      "image": "12345",
-      "price": 1234,
-      "id": 3
     }
   ],
   "categories": [

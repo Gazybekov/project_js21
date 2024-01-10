@@ -7,18 +7,31 @@ import {
   RadioGroup,
   TextField,
 } from "@mui/material";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useProducts } from "../context/ProductContextProvider";
+import { useSearchParams } from "react-router-dom";
 
 const SideBar = () => {
   const { categories, getCategories, fetchByParams } = useProducts();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [search, setSearch] = useState(searchParams.get("q") || "");
   useEffect(() => {
     getCategories();
   }, []);
-  console.log(categories);
+  useEffect(() => {
+    setSearchParams({
+      q: search,
+    });
+  }, [search]);
   return (
     <Paper sx={{ p: 2 }} elevation={5}>
-      <TextField variant="standard" label="search..." fullWidth />
+      <TextField
+        onChange={(e) => setSearch(e.target.value)}
+        variant="standard"
+        label="search..."
+        fullWidth
+        value={search}
+      />
       <FormControl>
         <FormLabel id="demo-radio-buttons-group-label">Category</FormLabel>
         <RadioGroup
