@@ -1,24 +1,22 @@
 import * as React from "react";
-import { styled, alpha } from "@mui/material/styles";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
-import InputBase from "@mui/material/InputBase";
-import Badge from "@mui/material/Badge";
-import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
-
-import AccountCircle from "@mui/icons-material/AccountCircle";
-import MailIcon from "@mui/icons-material/Mail";
-import NotificationsIcon from "@mui/icons-material/Notifications";
-import MoreIcon from "@mui/icons-material/MoreVert";
+import MenuIcon from "@mui/icons-material/Menu";
+import Container from "@mui/material/Container";
+import Avatar from "@mui/material/Avatar";
+import Button from "@mui/material/Button";
+import Tooltip from "@mui/material/Tooltip";
+import MenuItem from "@mui/material/MenuItem";
+import AdbIcon from "@mui/icons-material/Adb";
 import { Link } from "react-router-dom";
-import { Button } from "@mui/material";
-import { ShoppingCart } from "@mui/icons-material";
-import { useCart } from "../context/CartContextProvider";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import { Badge } from "@mui/material";
 import { useAuth } from "../context/AuthContextProvider";
+import { useCart } from "../context/CartContextProvider";
 import { ADMIN } from "../../helpers/const";
 
 const pages = [
@@ -26,293 +24,202 @@ const pages = [
   { id: 2, title: "About", link: "/about" },
   { id: 3, title: "Contacts", link: "/contacts" },
 ];
+const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
-const Search = styled("div")(({ theme }) => ({
-  position: "relative",
-  borderRadius: theme.shape.borderRadius,
-  backgroundColor: alpha(theme.palette.common.white, 0.15),
-  "&:hover": {
-    backgroundColor: alpha(theme.palette.common.white, 0.25),
-  },
-  marginRight: theme.spacing(2),
-  marginLeft: 0,
-  width: "100%",
-  [theme.breakpoints.up("sm")]: {
-    marginLeft: theme.spacing(3),
-    width: "auto",
-  },
-}));
-
-const SearchIconWrapper = styled("div")(({ theme }) => ({
-  padding: theme.spacing(0, 2),
-  height: "100%",
-  position: "absolute",
-  pointerEvents: "none",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-}));
-
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: "inherit",
-  "& .MuiInputBase-input": {
-    padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create("width"),
-    width: "100%",
-    [theme.breakpoints.up("md")]: {
-      width: "20ch",
-    },
-  },
-}));
-
-export default function Navbar() {
+function Navbar() {
   const {
     handleLogout,
     user: { email },
   } = useAuth();
-  const [badgeCount, setBadgeCount] = React.useState(0);
+
+  const [anchorElNav, setAnchorElNav] = React.useState(null);
+  const [anchorElUser, setAnchorElUser] = React.useState(null);
   const { getProductsCountInCart, addProductToCart } = useCart();
+  const [badgeCount, setBadgeCount] = React.useState(0);
+
   React.useEffect(() => {
     setBadgeCount(getProductsCountInCart());
   }, [addProductToCart]);
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
-  const isMenuOpen = Boolean(anchorEl);
-  const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-
-  const handleProfileMenuOpen = (event) => {
-    setAnchorEl(event.currentTarget);
+  const handleOpenNavMenu = (event) => {
+    setAnchorElNav(event.currentTarget);
+  };
+  const handleOpenUserMenu = (event) => {
+    setAnchorElUser(event.currentTarget);
   };
 
-  const handleMobileMenuClose = () => {
-    setMobileMoreAnchorEl(null);
+  const handleCloseNavMenu = () => {
+    setAnchorElNav(null);
   };
 
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-    handleMobileMenuClose();
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
   };
-
-  const handleMobileMenuOpen = (event) => {
-    setMobileMoreAnchorEl(event.currentTarget);
-  };
-
-  const menuId = "primary-search-account-menu";
-  const renderMenu = (
-    <Menu
-      anchorEl={anchorEl}
-      anchorOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
-      id={menuId}
-      keepMounted
-      transformOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
-      open={isMenuOpen}
-      onClose={handleMenuClose}
-    >
-      {email ? (
-        <MenuItem
-          onClick={() => {
-            handleLogout();
-            handleMenuClose();
-          }}
-        >
-          <Typography textAlign={"center"}>Logout</Typography>
-        </MenuItem>
-      ) : (
-        <Link to={"/auth"}>
-          <MenuItem onClick={handleMenuClose}>
-            <Typography textAlign={"center"}>Login</Typography>
-          </MenuItem>
-        </Link>
-      )}
-      <Typography sx={{ color: "black" }}>
-        {email ? `Hello ${email}` : `Hello, Guest`}
-      </Typography>
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-    </Menu>
-  );
-
-  const mobileMenuId = "primary-search-account-menu-mobile";
-  const renderMobileMenu = (
-    <Menu
-      anchorEl={mobileMoreAnchorEl}
-      anchorOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
-      id={mobileMenuId}
-      keepMounted
-      transformOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
-      open={isMobileMenuOpen}
-      onClose={handleMobileMenuClose}
-    >
-      <MenuItem>
-        <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-          <Badge badgeContent={4} color="error">
-            <MailIcon />
-          </Badge>
-        </IconButton>
-        <p>Messages</p>
-      </MenuItem>
-
-      <MenuItem>
-        <IconButton
-          size="large"
-          aria-label="show 17 new notifications"
-          color="inherit"
-        >
-          <Badge badgeContent={17} color="error">
-            <NotificationsIcon />
-          </Badge>
-        </IconButton>
-        <p>Notifications</p>
-      </MenuItem>
-      <MenuItem onClick={handleProfileMenuOpen}>
-        <IconButton
-          size="large"
-          aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
-        >
-          <AccountCircle />
-        </IconButton>
-
-        <p>Profile</p>
-      </MenuItem>
-    </Menu>
-  );
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar
-        style={{ backgroundColor: "black", color: "white" }}
-        position="static"
-      >
-        <Toolbar>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="open drawer"
-            sx={{ mr: 2 }}
-          ></IconButton>
+    <AppBar
+      style={{ backgroundColor: "black", color: "white" }}
+      position="static"
+    >
+      <Container maxWidth="xl">
+        <Toolbar style={{ color: "black" }} disableGutters>
+          <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
           <Typography
             variant="h6"
             noWrap
             component="a"
             href="/"
             sx={{
-              display: {
-                xs: "none",
-                md: "flex",
-              },
+              mr: 2,
+              display: { xs: "none", md: "flex" },
               fontFamily: "monospace",
-              fontSize: 40,
               fontWeight: 700,
-              color: "inherit",
+              fontSize: 40,
               letterSpacing: ".3rem",
+              color: "white",
               textDecoration: "none",
             }}
           >
-            SHOP_KG
+            SHOP.CO
           </Typography>
 
-          {pages.map((elem) => (
-            <Link key={elem.id} to={elem.link}>
-              <MenuItem onClick={handleMenuClose}>
-                <Typography textAlign="center">{elem.title}</Typography>
-              </MenuItem>
-            </Link>
-          ))}
-          {email === ADMIN ? (
-            <Link to={"/admin"}>
-              <MenuItem onClick={handleMenuClose}>
-                <Typography textAlign={"center"}>ADMIN</Typography>
-              </MenuItem>
-            </Link>
-          ) : null}
-
-          {pages.map((elem) => (
-            <Link key={elem.id} to={elem.link}>
-              <Button
-                sx={{ my: 2, color: "white", display: "block" }}
-                onClick={handleMenuClose}
-              >
-                {elem.title}
-              </Button>
-            </Link>
-          ))}
-          {email === ADMIN ? (
-            <Link to={"/admin"}>
-              <Button
-                sx={{ my: 2, color: "white", display: "block" }}
-                onClick={handleMenuClose}
-              >
-                ADMIN
-              </Button>
-            </Link>
-          ) : null}
-
-          <Box sx={{ flexGrow: 1 }} />
-
-          <Box sx={{ display: { xs: "none", md: "flex" } }}>
+          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
               size="large"
-              aria-label="show 4 new mails"
-              color="inherit"
-            >
-              <Link to={"/cart"}>
-                <Badge badgeContent={badgeCount} color="success">
-                  <ShoppingCart sx={{ color: "white" }} />
-                </Badge>
-              </Link>
-            </IconButton>
-            <IconButton
-              size="large"
-              aria-label="show 17 new notifications"
-              color="inherit"
-            ></IconButton>
-            <IconButton
-              size="large"
-              edge="end"
               aria-label="account of current user"
-              aria-controls={menuId}
+              aria-controls="menu-appbar"
               aria-haspopup="true"
-              onClick={handleProfileMenuOpen}
+              onClick={handleOpenNavMenu}
               color="inherit"
             >
-              <AccountCircle />
+              <MenuIcon />
             </IconButton>
+            <Menu
+              id="menu-appbar"
+              anchorEl={anchorElNav}
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "left",
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "left",
+              }}
+              open={Boolean(anchorElNav)}
+              onClose={handleCloseNavMenu}
+              sx={{
+                display: { xs: "block", md: "none" },
+              }}
+            >
+              {pages.map((page) => (
+                <Link key={page.id} to={page.link}>
+                  <MenuItem onClick={handleCloseNavMenu}>
+                    <Typography textAlign="center">{page.title}</Typography>
+                  </MenuItem>
+                </Link>
+              ))}
+              {email === ADMIN ? (
+                <Link to={"/admin"}>
+                  <MenuItem onClick={handleCloseNavMenu}>
+                    <Typography textAlign="center">ADMIN</Typography>
+                  </MenuItem>
+                </Link>
+              ) : null}
+            </Menu>
           </Box>
-
-          <Box sx={{ display: { xs: "flex", md: "none" } }}>
-            <IconButton
-              size="large"
-              aria-label="show more"
-              aria-controls={mobileMenuId}
-              aria-haspopup="true"
-              onClick={handleMobileMenuOpen}
-              color="inherit"
+          <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
+          <Typography
+            variant="h5"
+            noWrap
+            component="a"
+            href="#app-bar-with-responsive-menu"
+            sx={{
+              mr: 2,
+              display: { xs: "flex", md: "none" },
+              flexGrow: 1,
+              fontFamily: "monospace",
+              fontWeight: 700,
+              letterSpacing: ".3rem",
+              color: "inherit",
+              textDecoration: "none",
+            }}
+          >
+            LOGO
+          </Typography>
+          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+            {pages.map((page) => (
+              <Link key={page.id} to={page.link}>
+                <Button
+                  onClick={handleCloseNavMenu}
+                  sx={{ my: 2, color: "white", display: "block" }}
+                >
+                  {page.title}
+                </Button>
+              </Link>
+            ))}
+            {email === ADMIN ? (
+              <Link to={"/admin"}>
+                <Button
+                  onClick={handleCloseNavMenu}
+                  sx={{ my: 2, color: "white", display: "block" }}
+                >
+                  ADMIN
+                </Button>
+              </Link>
+            ) : null}
+          </Box>
+          <Typography sx={{ color: "white" }}>
+            {email ? `Hello, ${email}` : "Hello, Guest"}
+          </Typography>
+          <Link to={"/cart"}>
+            <Badge badgeContent={badgeCount} color="success">
+              <ShoppingCartIcon sx={{ color: "white" }} />
+            </Badge>
+          </Link>
+          <Box sx={{ flexGrow: 0 }}>
+            <Tooltip title="Open settings">
+              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+              </IconButton>
+            </Tooltip>
+            <Menu
+              sx={{ mt: "45px" }}
+              id="menu-appbar"
+              anchorEl={anchorElUser}
+              anchorOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              open={Boolean(anchorElUser)}
+              onClose={handleCloseUserMenu}
             >
-              <MoreIcon />
-            </IconButton>
+              {email ? (
+                <MenuItem
+                  onClick={() => {
+                    handleLogout();
+                    handleCloseUserMenu();
+                  }}
+                >
+                  <Typography textAlign="center">Logout</Typography>
+                </MenuItem>
+              ) : (
+                <Link to={"/auth"}>
+                  <MenuItem onClick={handleCloseUserMenu}>
+                    <Typography textAlign="center">Login</Typography>
+                  </MenuItem>
+                </Link>
+              )}
+            </Menu>
           </Box>
         </Toolbar>
-      </AppBar>
-      {renderMobileMenu}
-      {renderMenu}
-    </Box>
+      </Container>
+    </AppBar>
   );
 }
+export default Navbar;
