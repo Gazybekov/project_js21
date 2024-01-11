@@ -9,16 +9,17 @@ const style = {
   boxShadow: 24,
   border: "2px solid black",
 };
-const AddCategoryModal = () => {
+const AddCategoryModal = (props) => {
   const { createCategories } = useProducts();
 
   const [category, setCategory] = useState("");
+  const { open, handleClose } = props;
   const handleAdd = () => {
     const newCategory = { name: category };
     createCategories(newCategory);
   };
   return (
-    <Modal sx={style} open>
+    <Modal sx={style} open={open} onClose={handleClose}>
       <Box>
         <Typography component="h2" variant="h6">
           Add new category

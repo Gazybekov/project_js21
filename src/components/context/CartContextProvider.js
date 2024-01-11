@@ -24,7 +24,7 @@ const CartContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, INIT_STATE);
   // функция для получения продуктов добавленных из хранилища
   const getCart = () => {
-    const cart = getLocalStorage();
+    let cart = getLocalStorage();
     //проверка на наличие данных под ключом cart в localStorage
     if (!cart) {
       localStorage.setItem(

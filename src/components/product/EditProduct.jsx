@@ -77,6 +77,13 @@ const EditProduct = () => {
         label="Image URL"
         variant="outlined"
       />
+      <TextField
+        onChange={handleInput}
+        value={product.category}
+        name="catgory"
+        label="Category"
+        variant="outlined"
+      />
       <Button
         onClick={() => {
           editProduct(id, product);

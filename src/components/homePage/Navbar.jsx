@@ -18,6 +18,8 @@ import { Link } from "react-router-dom";
 import { Button } from "@mui/material";
 import { ShoppingCart } from "@mui/icons-material";
 import { useCart } from "../context/CartContextProvider";
+import { useAuth } from "../context/AuthContextProvider";
+import { ADMIN } from "../../helpers/const";
 
 const pages = [
   { id: 1, title: "Products", link: "/products" },
@@ -66,6 +68,10 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function Navbar() {
+  const {
+    handleLogout,
+    user: { email },
+  } = useAuth();
   const [badgeCount, setBadgeCount] = React.useState(0);
   const { getProductsCountInCart, addProductToCart } = useCart();
   React.useEffect(() => {
@@ -111,8 +117,26 @@ export default function Navbar() {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
+      {email ? (
+        <MenuItem
+          onClick={() => {
+            handleLogout();
+            handleMenuClose();
+          }}
+        >
+          <Typography textAlign={"center"}>Logout</Typography>
+        </MenuItem>
+      ) : (
+        <Link to={"/auth"}>
+          <MenuItem onClick={handleMenuClose}>
+            <Typography textAlign={"center"}>Login</Typography>
+          </MenuItem>
+        </Link>
+      )}
+      <Typography sx={{ color: "black" }}>
+        {email ? `Hello ${email}` : `Hello, Guest`}
+      </Typography>
       <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
     </Menu>
   );
 
@@ -204,13 +228,43 @@ export default function Navbar() {
           >
             SHOP_KG
           </Typography>
+
           {pages.map((elem) => (
             <Link key={elem.id} to={elem.link}>
-              <Button sx={{ my: 2, color: "white", display: "block" }}>
+              <MenuItem onClick={handleMenuClose}>
+                <Typography textAlign="center">{elem.title}</Typography>
+              </MenuItem>
+            </Link>
+          ))}
+          {email === ADMIN ? (
+            <Link to={"/admin"}>
+              <MenuItem onClick={handleMenuClose}>
+                <Typography textAlign={"center"}>ADMIN</Typography>
+              </MenuItem>
+            </Link>
+          ) : null}
+
+          {pages.map((elem) => (
+            <Link key={elem.id} to={elem.link}>
+              <Button
+                sx={{ my: 2, color: "white", display: "block" }}
+                onClick={handleMenuClose}
+              >
                 {elem.title}
               </Button>
             </Link>
           ))}
+          {email === ADMIN ? (
+            <Link to={"/admin"}>
+              <Button
+                sx={{ my: 2, color: "white", display: "block" }}
+                onClick={handleMenuClose}
+              >
+                ADMIN
+              </Button>
+            </Link>
+          ) : null}
+
           <Box sx={{ flexGrow: 1 }} />
 
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
